@@ -1,0 +1,6 @@
+[submodule "dependencies/GTK_Wrapper"]
+	path = dependencies/GTK_Wrapper
+	url = https://github.com/philnik777/GTK_Wrapper.git
+[submodule "dependencies/WinAPI_Wrapper"]
+	path = dependencies/WinAPI_Wrapper
+	url = https://github.com/philnik777/WinAPI_Wrapper.git
