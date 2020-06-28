@@ -1,3 +1,20 @@
 #pragma once
+#include <string>
+#include <memory>
 
-#include <GTK_Wrapper/Window.hpp>
+#ifdef WIN32
+namespace WinAPI
+{
+class Window;
+}
+#endif
+
+namespace GUI {
+	class Window {
+	  public:
+		Window(const std::string& name);
+
+	  private:
+		std::shared_ptr<WinAPI::Window> window;
+	};
+}
