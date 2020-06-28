@@ -1,6 +1,7 @@
 #pragma once
-#include <string>
 #include <codecvt>
+#include <locale>
+#include <string>
 
 namespace GUI::Convert
 {

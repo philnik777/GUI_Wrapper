@@ -8,7 +8,7 @@ set(GUI_WRAPPER_SUBPROJECTS
 add_library(
 	__GUI_Wrapper_src
 	Window.cpp
-	UTF8_conversion.cpp)
+)
 
 target_include_directories(__GUI_Wrapper_src PRIVATE
 	${GUI_WRAPPER_INCLUDE_DIR}

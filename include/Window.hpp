@@ -1,20 +1,32 @@
 #pragma once
-#include <string>
 #include <memory>
+#include <string>
 
 #ifdef WIN32
 namespace WinAPI
 {
 class Window;
 }
+#elif defined(linux)
+namespace gtk
+{
+class Window;
+}
 #endif
 
-namespace GUI {
-	class Window {
-	  public:
-		Window(const std::string& name);
+namespace GUI
+{
+#ifdef WIN32
+#elif defined(linux)
+namespace UI = gtk;
+#endif
 
-	  private:
-		std::shared_ptr<WinAPI::Window> window;
-	};
+class Window
+{
+  public:
+	Window(const std::string& name);
+
+  private:
+	std::shared_ptr<UI::Window> window;
+};
 }
