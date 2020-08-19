@@ -1,9 +1,11 @@
-#include "Window.hpp"
+#include "GUI_Wrapper/Window.hpp"
 
-#include "UTF8_conversion.hpp"
+#include "GUI_Wrapper/MenuBar.hpp"
+#include "GUI_Wrapper/UTF8_conversion.hpp"
 
 #ifdef WIN32
 	#include <WinAPI/Window.hpp>
+	#include <WinAPI/WinAPI_Wrapper.hpp>
 #elif defined(linux)
 	#include <GTK_Wrapper/Window.hpp>
 #endif
@@ -12,39 +14,47 @@ namespace GUI
 {
 #ifdef WIN32
 Window::Window(const std::string& name)
-	: window(WinAPI::Window::create(Convert::toWString(name)))
-{}
+{
+	element = WinAPI::Window::create(Convert::toWString(name));
+}
 
 void Window::loop()
 {
-	window->loop();
+	element->loop();
 }
 
-void Window::visible(bool s)
+void Window::closeCallback(std::function<void()> f)
 {
-	window->setVisible(s);
+	element->setCloseCallback(
+		[=](WinAPI::HWND, WinAPI::LPARAM, WinAPI::WPARAM) {
+			f();
+			return 0;
+		});
 }
 
-bool Window::visible()
+void Window::close()
 {
-	return window->isVisible();
+	element->close();
 }
 
-void Window::setCloseCallback(std::function<void()> f)
+void Window::menuBar(const GUI::MenuBar& mb)
 {
-	window->setCloseCallback([=](WinAPI::HWND, WinAPI::LPARAM, WinAPI::WPARAM) {
-		f();
-		return 0;
-	});
+	element->setMenuBar(mb.getRaw());
 }
 
-void Window::close() {
-	window->close();
+Rect Window::clientRect()
+{
+	return element->getClientRect();
+}
+
+void Window::postQuitMessage()
+{
+	UI::postQuitMessage(0);
 }
 
 #elif defined(linux)
 
-Window::Window(const std::string& name) : window(gtk::Window::create(name)) {}
+Window::Window(const std::string& name) : element(gtk::Window::create(name)) {}
 
 #endif
 }
