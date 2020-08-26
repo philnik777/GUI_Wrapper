@@ -10,7 +10,7 @@ UI_FORWARD_DECLARE_CLASS(Text)
 
 namespace GUI
 {
-	enum class BindPoint
+enum class BindPoint
 {
 	TOP_LEFT,
 	TOP_RIGHT,
@@ -27,7 +27,10 @@ class Text : public Element
 		 Point pos,
 		 BindPoint p = BindPoint::TOP_LEFT);
 
-	static auto create(const Element& parent, const std::string& text, Point pos, BindPoint p = BindPoint::TOP_LEFT)
+	static auto create(const Element& parent,
+					   const std::string& text,
+					   Point pos,
+					   BindPoint p = BindPoint::TOP_LEFT)
 	{
 		return std::make_shared<Text>(parent, text, pos, p);
 	}

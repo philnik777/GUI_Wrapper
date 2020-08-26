@@ -12,17 +12,34 @@
 
 namespace GUI
 {
-#ifdef WIN32
 Window::Window(const std::string& name)
 {
-	element = WinAPI::Window::create(Convert::toWString(name));
+	setRaw(std::dynamic_pointer_cast<UI::Element>(
+		UI::Window::create(Convert::toSystemString(name))));
 }
 
 void Window::loop()
 {
-	element->loop();
+	getRaw<UI::Window>()->loop();
 }
 
+Rect Window::clientRect()
+{
+	auto tmp = getRaw<UI::Element>()->getClientRect();
+	return *reinterpret_cast<Rect*>(&tmp);
+}
+
+void Window::menuBar(const GUI::MenuBar& mb)
+{
+	getRaw<UI::Window>()->setMenuBar(mb.getRaw());
+}
+
+void Window::close()
+{
+	getRaw<UI::Window>()->close();
+}
+
+#ifdef WIN32
 void Window::closeCallback(std::function<void()> f)
 {
 	element->setCloseCallback(
@@ -32,29 +49,17 @@ void Window::closeCallback(std::function<void()> f)
 		});
 }
 
-void Window::close()
-{
-	element->close();
-}
-
-void Window::menuBar(const GUI::MenuBar& mb)
-{
-	element->setMenuBar(mb.getRaw());
-}
-
-Rect Window::clientRect()
-{
-	return element->getClientRect();
-}
-
 void Window::postQuitMessage()
 {
 	UI::postQuitMessage(0);
 }
 
 #elif defined(linux)
+void Window::closeCallback(std::function<void()> cc)
+{
+	getRaw<UI::Window>()->setCloseCallback(cc);
+}
 
-Window::Window(const std::string& name) : element(gtk::Window::create(name)) {}
-
+void Window::postQuitMessage() {}
 #endif
 }

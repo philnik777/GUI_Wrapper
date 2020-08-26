@@ -4,11 +4,20 @@
 
 #include <memory>
 
+#ifdef _WIN32
 UI_FORWARD_DECLARE_CLASS(Window)
+#elif defined(linux)
+UI_FORWARD_DECLARE_CLASS(Element)
+#endif
 
 namespace GUI
 {
 USING_UI_NAMESPACE;
+#ifdef _WIN32
+using BaseType = UI::Window;
+#elif defined(linux)
+using BaseType = UI::Element;
+#endif
 class Element
 {
   public:
@@ -22,12 +31,19 @@ class Element
 	void focus();
 
 	template<class T>
-	std::shared_ptr<T> getRaw() const
+	inline std::shared_ptr<T> getRaw() const
 	{
 		return std::dynamic_pointer_cast<T>(element);
 	}
 
   protected:
-	std::shared_ptr<UI::Window> element;
+	template<class T>
+	inline void setRaw(std::shared_ptr<T> raw)
+	{
+		element = std::dynamic_pointer_cast<UI::Element>(raw);
+	}
+
+  private:
+	std::shared_ptr<BaseType> element;
 };
 }

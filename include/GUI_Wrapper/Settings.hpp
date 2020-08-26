@@ -7,6 +7,7 @@
 #define USING_UI_NAMESPACE namespace UI = WinAPI
 #elif defined(linux)
 	#define UI_NAMESPACE gtk
+	#define USING_UI_NAMESPACE namespace UI = gtk;
 #endif
 
 #define UI_FORWARD_DECLARE(el) \
